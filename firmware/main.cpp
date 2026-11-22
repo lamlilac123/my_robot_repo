@@ -31,7 +31,7 @@ const uint32_t MAX_DUTY_SERVO = 16383;
 
 uint8_t pan_angle = 90;
 uint8_t tilt_angle = 90;
-float speed_limit = 0.25;
+float speed_limit = 0.3;
 void setup_gpio(gpio_num_t out_gpio)
 {
   const gpio_config_t io_conf_out = {
@@ -170,8 +170,8 @@ void change_motor_speed()
 
   // công thức thay đổi speed theo loss
   // ví dụ: lệch -0.5 (trái), scale bánh trái chậm 50% và bánh phải nhanh lên 150%
-  float speed_a = -speed_limit * (-1.0 - pan_loss_normalized);
-  float speed_b = speed_limit * (1 - pan_loss_normalized);
+  float speed_a = speed_limit * (1 - pan_loss_normalized);
+  float speed_b = -speed_limit * (-1.0 - pan_loss_normalized);
 
   uint32_t duty_a = uint32_t(speed_a * MAX_DUTY_MOTOR);
   uint32_t duty_b = uint32_t(speed_b * MAX_DUTY_MOTOR);
