@@ -30,22 +30,19 @@ from ament_index_python.packages import get_package_share_directory
 
 # Lấy đường dẫn tự động tới file pou.onnx
 model_normal_name = "pou.onnx"
-pkg_share = get_package_share_directory('ten_package_cua_ban')
+pkg_share = get_package_share_directory('yolo_onnx_ros2')
+
 MODEL_ONNX_PATH = os.path.join(pkg_share, 'models', model_normal_name)
+IP_CAM_URL = "http://192.168.3.100:8081/video" 
 
 
 class inference_node(Node):
     def __init__(self):
         super().__init__("Inference_Node") 
-        self.cap = cv2.VideoCapture(0, cv2.CAP_V4L2)
+        self.cap = cv2.VideoCapture(IP_CAM_URL)
         if not self.cap.isOpened():
             self.get_logger().info("\n\n\n\n KHÔNG MỞ ĐƯỢC CAMERA! \n\n\n\n")
             exit()
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
-        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-
         self.cap.set(cv2.CAP_PROP_FPS, 30)
         self.get_logger().info(f"fps thực: {self.cap.get(cv2.CAP_PROP_FPS)}")
 
@@ -169,8 +166,8 @@ class inference_node(Node):
             cv2.waitKey(1)
             t4 = time.perf_counter()
 
-            # đo được: preprocess~1ms | inference~10ms | postprocess~1ms | visualization~4ms  
-            # tổng khoảng 15ms-20ms
+            # đo được: preprocess~1ms | inference~14ms | postprocess~3ms | visualization~6ms  
+            # tổng cả thread infer khoảng 22ms-30ms
 
             #self.get_logger().info(f"pre {1000*(t1-t0):.0f} | infer {1000*(t2-t1):.0f} | post {1000*(t3-t2):.0f} | show {1000*(t4-t3):.0f} ms")
 
@@ -183,7 +180,7 @@ def main(args=None):
         node = inference_node()
         rclpy.spin(node)
     finally:
-        node.cap_.release() 
+        node.cap.release() 
         node.destroy_node() 
         cv2.destroyAllWindows()
         rclpy.shutdown()
