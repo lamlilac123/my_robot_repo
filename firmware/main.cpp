@@ -18,8 +18,8 @@
 
 // /dev/ttyUSB0
 // kiến thức mới
-const char *WIFI_SSID = "MY QUYNH";
-const char *WIFI_PASS = "Quynh2006";
+const char *WIFI_SSID = "CEEC_Tenda";
+const char *WIFI_PASS = "1denmuoi1";
 const uint16_t UDP_PORT = 4210;
 WiFiUDP udp;
 uint8_t rx_buf[256];
@@ -111,17 +111,29 @@ void setup()
   // setup wifi
   Serial.begin(115200);
 
-  IPAddress ip(192, 168, 1, 40), gw(192, 168, 1, 1), mask(255, 255, 255, 0);
-  WiFi.config(ip, gw, mask);
+  IPAddress ip(192, 168, 0, 245); // đây là IP tĩnh tự chọn trong UIT Public
+  IPAddress gw(192, 168, 0, 1);
+  IPAddress mask(255, 255, 255, 0);
 
   WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
   WiFi.setSleep(false);
+  WiFi.config(ip, gw, mask);
+
+  if (WIFI_PASS != nullptr && WIFI_PASS[0] != '\0')
+  {
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+  }
+  else
+  {
+    WiFi.begin(WIFI_SSID);
+  }
+
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(300);
     Serial.print(".");
   }
+
   Serial.println();
   Serial.print("ESP32 IP: ");
   Serial.println(WiFi.localIP());
@@ -201,6 +213,7 @@ void change_servor_angle()
 
 void loop()
 {
+
   if (udp.parsePacket() >= 4)
   {
     uint8_t buf[4];
