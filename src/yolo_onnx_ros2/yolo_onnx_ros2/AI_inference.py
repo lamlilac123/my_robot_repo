@@ -29,7 +29,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 # Lấy đường dẫn tự động tới file pou.onnx
-model_normal_name = "pou.onnx"
+model_normal_name = "yellow_wheel.onnx"
 pkg_share = get_package_share_directory('yolo_onnx_ros2')
 
 MODEL_ONNX_PATH = os.path.join(pkg_share, 'models', model_normal_name)
