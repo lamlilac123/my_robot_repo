@@ -33,7 +33,7 @@ model_normal_name = "pou.onnx"
 pkg_share = get_package_share_directory('yolo_onnx_ros2')
 
 MODEL_ONNX_PATH = os.path.join(pkg_share, 'models', model_normal_name)
-IP_CAM_URL = "http://192.168.3.100:8081/video" 
+IP_CAM_URL = "http://192.168.0.175:8081/video" 
 
 
 class inference_node(Node):

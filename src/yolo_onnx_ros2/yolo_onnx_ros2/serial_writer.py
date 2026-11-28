@@ -7,7 +7,7 @@ from queue import Queue
 from threading import Thread
 
 # đây là IP cố đinh của esp32 vì tác giả đã cài IP tĩnh cho tiện
-ESP32_IP = '192.168.1.40'  # Đổi thành IP in ra trên Serial Monitor của ESP32
+ESP32_IP = '192.168.0.245' # Đổi thành IP in ra trên Serial Monitor của ESP32
 UDP_PORT = 4210
 
 class SimpleSub(Node):
